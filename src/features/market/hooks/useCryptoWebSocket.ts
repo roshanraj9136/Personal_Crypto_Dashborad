@@ -15,8 +15,6 @@ export const useCryptoWebSocket = () => {
 
   useEffect(() => {
     if (watchlist.length === 0) return;
-
-    // FIX 1: Use the /stream?streams= endpoint on Port 443
     const streams = watchlist.map((symbol) => `${symbol.toLowerCase()}@ticker`).join('/');
     const wsUrl = `wss://stream.binance.com:443/stream?streams=${streams}`;
 
@@ -25,8 +23,6 @@ export const useCryptoWebSocket = () => {
 
     ws.onmessage = (event) => {
       const response = JSON.parse(event.data);
-      
-      // FIX 2: In combined streams, the data is inside response.data
       const ticker = response.data; 
 
       if (!ticker || !ticker.s || !ticker.c) return;
@@ -51,7 +47,7 @@ export const useCryptoWebSocket = () => {
       setTicker(symbol, {
         symbol,
         price: currentPrice.toFixed(2),
-        changePercent: parseFloat(changePercent).toFixed(2),
+        changePercent: parseFloat(changePercent),
       });
     };
 
