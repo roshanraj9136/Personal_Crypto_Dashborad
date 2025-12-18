@@ -17,7 +17,7 @@ export const useCryptoWebSocket = () => {
     if (watchlist.length === 0) return;
 
     const streams = watchlist.map((symbol) => `${symbol.toLowerCase()}@ticker`).join('/');
-    const wsUrl = `wss://stream.binance.com:443/ws/${streams}`;
+    const wsUrl = `wss://stream.binance.com:443/stream?streams=${streams}`;
     const ws = new WebSocket(wsUrl);
     socketRef.current = ws;
 
