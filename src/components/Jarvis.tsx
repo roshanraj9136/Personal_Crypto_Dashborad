@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
-// 👇 FIXED IMPORT: Points to src/hooks/useVoiceCommand
+import { useState } from 'react';
 import { useVoiceCommand } from '../hooks/useVoiceCommand'; 
 import { usePriceStore } from '../features/market/store/usePriceStore';
 import { Mic, MicOff } from 'lucide-react';
 import clsx from 'clsx';
 
-// 1. The "Knowledge Graph" (What Jarvis knows)
 const KNOWLEDGE_BASE: Record<string, string> = {
   'hello': 'Hello sir. The market looks volatile today.',
   'hi': 'Greetings. Ready to trade?',
@@ -36,7 +34,6 @@ export const Jarvis = () => {
   
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  // 2. The "Natural Voice" Selector
   const speak = (text: string) => {
     window.speechSynthesis.cancel();
     
@@ -72,7 +69,6 @@ export const Jarvis = () => {
       }
     }
 
-    // --- LEVEL 2: MARKET DATA ---
     let targetSymbol: string | null = null;
 
     for (const [name, symbol] of Object.entries(COIN_DICTIONARY)) {
@@ -99,7 +95,6 @@ export const Jarvis = () => {
       return;
     }
 
-    // --- LEVEL 3: EXECUTION ---
     if (lower.includes('switch') || lower.includes('show') || lower.includes('open') || lower.includes('go to')) {
       setSelectedSymbol(fullPair);
       speak(`Right away. Pulling up the ${targetSymbol} chart.`);
