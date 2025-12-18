@@ -15,6 +15,7 @@ export const useCryptoWebSocket = () => {
 
   useEffect(() => {
     if (watchlist.length === 0) return;
+
     const streams = watchlist.map((symbol) => `${symbol.toLowerCase()}@ticker`).join('/');
     const wsUrl = `wss://stream.binance.com:443/stream?streams=${streams}`;
 
@@ -46,8 +47,8 @@ export const useCryptoWebSocket = () => {
 
       setTicker(symbol, {
         symbol,
-        price: currentPrice.toFixed(2),
-        changePercent: parseFloat(changePercent),
+        price: priceStr, 
+        changePercent: parseFloat(changePercent).toFixed(2),
       });
     };
 
