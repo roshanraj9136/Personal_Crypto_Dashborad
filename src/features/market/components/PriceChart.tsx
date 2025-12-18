@@ -9,7 +9,6 @@ import {
   CartesianGrid 
 } from 'recharts';
 import { usePriceStore } from '../store/usePriceStore';
-import { formatCurrency } from '../../../utils';
 import { Pause, Play } from 'lucide-react';
 
 export const PriceChart = ({ symbol }: { symbol: string }) => {
@@ -34,7 +33,6 @@ export const PriceChart = ({ symbol }: { symbol: string }) => {
 
     setData((prev) => {
       const newData = [...prev, newPoint];
-      // FIX 1: Reduced window to 50 points to make micro-movements more visible
       if (newData.length > 50) return newData.slice(1);
       return newData;
     });
@@ -109,7 +107,6 @@ export const PriceChart = ({ symbol }: { symbol: string }) => {
                 width={80} 
                 axisLine={false}
                 tickLine={false}
-                // FIX 2: Increased decimal precision for the Y-Axis labels
                 tickFormatter={(val) => 
                    new Intl.NumberFormat('en-US', { 
                      style: 'currency', 
@@ -126,7 +123,6 @@ export const PriceChart = ({ symbol }: { symbol: string }) => {
                 itemStyle={{ color: color, fontWeight: 'bold' }}
                 labelFormatter={(label) => new Date(label).toLocaleTimeString() + `.${new Date(label).getMilliseconds()}`}
                 formatter={(value: number) => [
-                  // FIX 3: Increased tooltip precision for better data insight
                   new Intl.NumberFormat('en-US', { 
                     style: 'currency', 
                     currency: selectedCurrency,
