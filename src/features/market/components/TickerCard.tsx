@@ -14,7 +14,6 @@ export const TickerCard = ({ data }: Props) => {
   const setSelectedSymbol = usePriceStore((state) => state.setSelectedSymbol);
   const selectedSymbol = usePriceStore((state) => state.selectedSymbol);
   
-  // 1. Get Currency Config
   const selectedCurrency = usePriceStore((state) => state.selectedCurrency);
   const exchangeRate = usePriceStore((state) => state.exchangeRate);
 
@@ -49,8 +48,12 @@ export const TickerCard = ({ data }: Props) => {
         flash === 'down' ? "text-red-400" :
         "text-white"
       )}>
-        {/* 2. Pass Rate and Code to Formatter */}
-        {formatCurrency(price, exchangeRate, selectedCurrency)}
+        {new Intl.NumberFormat('en-US', { 
+           style: 'currency', 
+           currency: selectedCurrency,
+           minimumFractionDigits: 2,
+           maximumFractionDigits: 2 
+        }).format(parseFloat(price) * exchangeRate)}
       </div>
       
       <div className={`text-sm mt-3 font-bold flex items-center ${
