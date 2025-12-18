@@ -22,31 +22,31 @@ export const useCryptoWebSocket = () => {
     socketRef.current = ws;
 
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (!data.s || !data.c) return;
+  const response = JSON.parse(event.data);
+  const ticker = response.data; 
+  if (!ticker || !ticker.s || !ticker.c) return;
 
-      const { s: symbol, c: priceStr, P: changePercent } = data;
-      const currentPrice = parseFloat(priceStr);
-      if (alertConfig && alertConfig.symbol === symbol && !hasTriggeredRef.current) {
-        const hitTarget = currentPrice >= alertConfig.price; // Simplified hit logic
-        if (hitTarget) {
-          audioRef.current.play().catch(e => console.error(e));
-          if (Notification.permission === 'granted') {
-            new Notification(`🚀 ${symbol} Hit Target!`, { body: `$${currentPrice}` });
-          }
-          hasTriggeredRef.current = true;
-          setAlert(symbol, null);
-        }
+  const { s: symbol, c: priceStr, P: changePercent } = ticker;
+  const currentPrice = parseFloat(priceStr);
+  if (alertConfig && alertConfig.symbol === symbol && !hasTriggeredRef.current) {
+    const hitTarget = currentPrice >= alertConfig.price;
+    if (hitTarget) {
+      audioRef.current.play().catch(e => console.error(e));
+      if (Notification.permission === 'granted') {
+        new Notification(`🚀 ${symbol} Hit Target!`, { body: `$${currentPrice}` });
       }
+      hasTriggeredRef.current = true;
+      setAlert(symbol, null);
+    }
+  }
 
-      if (!alertConfig) hasTriggeredRef.current = false;
-
-      setTicker(symbol, {
-        symbol,
-        price: currentPrice.toFixed(2),
-        changePercent: parseFloat(changePercent).toFixed(2),
-      });
-    };
+  if (!alertConfig) hasTriggeredRef.current = false;
+  setTicker(symbol, {
+    symbol,
+    price: currentPrice.toFixed(2),
+    changePercent: parseFloat(changePercent).toFixed(2),
+  });
+};
     return () => {
       if (ws.readyState === 1) ws.close();
     };
