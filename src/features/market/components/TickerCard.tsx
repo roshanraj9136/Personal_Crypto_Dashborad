@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { TickerData } from '../types';
 import clsx from 'clsx';
 import { usePriceStore } from '../store/usePriceStore';
-import { formatCurrency, formatPct } from '../../../utils';
+import { formatPct } from '../../../utils';
 
 interface Props {
   data: TickerData;
